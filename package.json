@@ -1,0 +1,9 @@
+{
+  "name": "loto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "simpleheat": "^0.4.0"
+  }
+}

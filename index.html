@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div class="container">
+    <canvas id="canvas2" height="300" width="250" style="border: 1px solid black;"></canvas>
+    <canvas id="canvas3" height="300" width="250" style="border: 1px solid black;"></canvas>
+
+    <canvas id="canvas" height="300" width="250" style="border: 1px solid black;"></canvas>
+    <canvas id="canvas4" height="300" width="250" style="border: 1px solid black;"></canvas>
+    <canvas id="canvas5" height="300" width="250" style="border: 1px solid black;"></canvas>
+
+  </div>
+
+  <script src="node_modules/simpleheat/simpleheat.js"></script>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.font = "12px Verdana";
+
+    var canvas2 = document.getElementById("canvas2");
+    var ctx2 = canvas2.getContext("2d");
+    ctx2.font = "12px Verdana";
+
+    var canvas3 = document.getElementById("canvas3");
+    var ctx3 = canvas3.getContext("2d");
+    ctx3.font = "12px Verdana";
+
+
+    var canvas4 = document.getElementById("canvas4");
+    var canvas5 = document.getElementById("canvas5");
+
+
+    var stats = {};
+    var t_n = 1;
+
+    var p_x, p_y;
+    for (var i = 1; i <= 8; i++) {
+      for (var j = 1; j <= 5; j++) {
+
+        p_x = 30 * j;
+        p_y = 30 * i;
+
+        stats[t_n] = { x: p_x, y: p_y, value: 0 }
+        // ctx.fillText(t_n, p_x, p_y);
+        t_n++;
+      }
+    }
+
+
+    var heat = simpleheat(canvas);
+    var heat2 = simpleheat(canvas4);
+    var heat3 = simpleheat(canvas5);
+
+    // define data
+    // var data = [
+    //   [x, y, value]
+    // ]
+
+    var pool = [
+      [6, 17, 19, 25, 26, 35, 39, 11], // 2019
+      [10, 14, 19, 20, 31, 33, 34, 30],
+      [4, 11, 20, 21, 24, 27, 29, 16],
+      [3, 9, 10, 12, 16, 23, 35, 19],
+      [2, 8, 18, 19, 20, 21, 34, 9],
+      [5, 9, 10, 15, 18, 19, 39, 13],
+      [5, 11, 17, 26, 29, 30, 39, 34],
+      [10, 17, 22, 26, 27, 32, 34, 33],
+      [6, 12, 22, 24, 25, 26, 34, 27],
+      [7, 12, 17, 19, 22, 31, 36, 34], //2018
+      [5, 10, 14, 17, 20, 22, 27, 34],
+      [12, 16, 20, 23, 24, 38, 39, 10],
+      [5, 10, 20, 24, 31, 37, 39, 38],
+      [3, 6, 14, 30, 31, 32, 33, 13],
+      [1, 4, 6, 12, 15, 16, 24, 30],
+      [2, 5, 8, 9, 11, 17, 33, 28],
+      [4, 7, 18, 20, 26, 28, 34, 1],
+    ]
+
+    pool.forEach(function (numbers, index) {
+      numbers.forEach(function (number, _) {
+        // console.log(number)
+        stats[number].value += 1;
+      })
+      // console.log("---")
+    })
+
+    // console.log(stats)
+    // // set data of [[x, y, value], ...] format
+    var draw_data = [];
+    var max = 1;
+
+    for (var i = 1; i <= 40; i++) {
+      if (stats[i].value > max) {
+        max = stats[i].value
+      }
+
+      draw_data.push([stats[i].x, stats[i].y, stats[i].value]);
+    }
+    heat.data(draw_data);
+    heat2.data(draw_data);
+    heat3.data(draw_data);
+    // console.log(draw_data);
+
+    // set max data value (1 by default)
+    heat.max(max);
+    heat2.max(max);
+    heat3.max(max);
+
+    //radius
+    heat.radius(10, 5);
+    heat2.radius(20, 5);
+    heat3.radius(25, 15);
+
+    // draw heat
+    heat.draw();
+    heat2.draw();
+    heat3.draw();
+
+    for (var i = 1; i <= 40; i++) {
+      ctx2.fillText(i, stats[i].x, stats[i].y);
+      ctx3.fillText(stats[i].value, stats[i].x, stats[i].y);
+    }
+
+  </script>
+</body>
+
+</html>
